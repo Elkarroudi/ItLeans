@@ -1,10 +1,12 @@
 package com.itLens.surveyApp.models.mappers;
 
-public interface IGenericMapper<Entity, EntityDTO, EntityResponseDTO> {
+public interface IGenericMapper<Entity, EntityDTO, CreateEntityDTO, EntityResponseDTO> {
 
     Entity toEntity(EntityDTO entityDTO);
-    EntityDTO toDto(Entity entity);
-    EntityResponseDTO toResponseDto(Entity entity);
-    Entity fromResponseDto(EntityResponseDTO entityResponseDTO);
+    Entity toEntityFromCreateDto(CreateEntityDTO createEntityDTO);
+    Entity toEntityFromResponseDto(EntityResponseDTO entityResponseDTO);
+
+    EntityDTO toDtoFromEntity(Entity entity);
+    EntityResponseDTO toResponseDtoFromEntity(Entity entity);
 
 }
