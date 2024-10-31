@@ -5,13 +5,9 @@ import com.itLens.surveyApp.models.dtos.surveyEdition.SurveyEditionDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
 public record SubjectResponseDTO(
         @NotBlank( message = "Survey Id Is Required" )
         String id,

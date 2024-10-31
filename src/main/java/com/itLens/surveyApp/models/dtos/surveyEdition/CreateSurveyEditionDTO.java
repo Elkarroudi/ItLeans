@@ -1,13 +1,9 @@
 package com.itLens.surveyApp.models.dtos.surveyEdition;
 
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
 public record CreateSurveyEditionDTO(
         @NotNull( message = "Creation Date Is Required" )
         LocalDate creationDate,
