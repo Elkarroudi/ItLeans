@@ -32,7 +32,6 @@ public class Survey {
     private String title;
 
     @NotBlank
-    @Size(max = 255)
     @Column(
             name = "description",
             nullable = false
