@@ -1,12 +1,17 @@
 package com.itLens.surveyApp.models.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -18,33 +23,38 @@ import java.util.List;
 public class SurveyEdition {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue( strategy = GenerationType.UUID )
     private String id;
 
+    @NotNull
     @Column(
             name = "creationDate",
             nullable = false
     )
     private LocalDate creationDate;
 
+    @NotNull
     @Column(
             name = "startDate",
             nullable = false
     )
     private LocalDate startDate;
 
+    @NotNull
     @Column(
             name = "endDate",
             nullable = false
     )
     private LocalDate endDate;
 
+    @NotNull
     @Column(
             name = "year",
             nullable = false
     )
-    private String year;
+    private int year;
 
+    @NotBlank
     @ManyToOne
     @JoinColumn(
             name = "surveyId",
@@ -58,5 +68,15 @@ public class SurveyEdition {
             cascade = CascadeType.ALL
     )
     private List<Subject> subjects;
+
+    @CreationTimestamp
+    @Column(
+            updatable = false,
+            nullable = false
+    )
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
 }
