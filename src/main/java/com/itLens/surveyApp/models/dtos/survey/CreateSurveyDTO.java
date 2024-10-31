@@ -2,11 +2,7 @@ package com.itLens.surveyApp.models.dtos.survey;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public record CreateSurveyDTO(
         @NotBlank( message = "Survey Title Is Required" )
         @Size(max = 250)

@@ -3,14 +3,10 @@ package com.itLens.surveyApp.models.dtos.surveyEdition;
 import com.itLens.surveyApp.models.dtos.subject.SubjectDTO;
 import com.itLens.surveyApp.models.dtos.survey.SurveyDTO;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Getter
-@Setter
 public record SurveyEditionResponseDTO(
         @NotBlank( message = "Owner Id Is Required" )
         String id,
