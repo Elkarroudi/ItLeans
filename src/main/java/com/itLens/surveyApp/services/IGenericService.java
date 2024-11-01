@@ -7,7 +7,7 @@ public interface IGenericService<EntityDTO, CreateEntityDTO> {
     ApiResponse findAll();
     ApiResponse findById(String id);
     ApiResponse save(CreateEntityDTO entityDTO);
-    ApiResponse update(EntityDTO entityDTO);
-    ApiResponse delete( String id);
+    ApiResponse update(String id, EntityDTO entityDTO);
+    ApiResponse delete(String id);
 
 }

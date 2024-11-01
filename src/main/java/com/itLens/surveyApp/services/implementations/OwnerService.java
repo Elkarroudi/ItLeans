@@ -39,24 +39,32 @@ public class OwnerService implements IOwnerService {
                 ownerRepository.findById(id).orElse(null)
         );
 
-        if (owner == null) { return new ErrorApi(404, new String[]{"Owner not found"}); }
+        if (owner == null) { return new ErrorApi(404, new String[]{"Owner not found with Id: " + id}); }
         return new SuccessApi<>(200, owner);
     }
 
     @Override
     public ApiResponse save(CreateOwnerDTO createOwnerDTO) {
-        OwnerResponseDTO owner = ownerMapper.toResponseDtoFromEntity(
-                    ownerRepository.save(
-                            ownerMapper.toEntityFromCreateDto(createOwnerDTO)
-                    )
-                );
+        Owner owner = ownerRepository.save(
+                ownerMapper.toEntityFromCreateDto(createOwnerDTO)
+        );
 
-        return new SuccessApi<>(201, owner);
+        OwnerResponseDTO newOwner = ownerMapper.toResponseDtoFromEntity(owner);
+        return new SuccessApi<OwnerResponseDTO>(201, newOwner);
     }
 
     @Override
-    public ApiResponse update(OwnerDTO ownerDTO) {
-        return null;
+    public ApiResponse update(String id, OwnerDTO ownerDTO) {
+        Owner owner = ownerRepository.findById(id).orElse(null);
+        if (owner == null) { return new ErrorApi(404, new String[]{"Owner not found"}); }
+
+        owner = ownerMapper.updateEntityFromDto(ownerDTO, owner);
+
+        OwnerResponseDTO updatedOwner = ownerMapper.toResponseDtoFromEntity(
+                ownerRepository.save(owner)
+        );
+
+        return new SuccessApi<>(200, updatedOwner);
     }
 
     @Override
