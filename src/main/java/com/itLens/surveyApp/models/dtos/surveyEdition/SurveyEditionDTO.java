@@ -1,10 +1,16 @@
 package com.itLens.surveyApp.models.dtos.surveyEdition;
 
+import com.itLens.surveyApp.models.entities.SurveyEdition;
+import com.itLens.surveyApp.utils.existsAnnotation.Exists;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
 public record SurveyEditionDTO(
+        @Exists(
+                entity = SurveyEdition.class,
+                message = "Survey Edition With Id Not Found"
+        )
         @NotBlank( message = "Owner Id Is Required" )
         String id,
 
