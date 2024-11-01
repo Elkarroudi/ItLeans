@@ -10,15 +10,9 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SuccessApi<ResponseDTO> {
+public class ErrorApi extends ApiResponse {
 
     @NotNull
-    private ResponseDTO data;
-
-    @NotNull
-    private int httpStatus;
-
-    private final boolean success = true;
-    private final LocalDateTime timestamp = LocalDateTime.now();
+    private String[] messages;
 
 }
