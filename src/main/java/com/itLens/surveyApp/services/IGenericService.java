@@ -1,13 +1,13 @@
 package com.itLens.surveyApp.services;
 
-import java.util.List;
+import com.itLens.surveyApp.utils.responseEntities.ApiResponse;
 
-public interface IGenericService<Entity, EntityDTO, ResponseDTO, CreateEntityDTO> {
+public interface IGenericService<EntityDTO, CreateEntityDTO> {
 
-    List<ResponseDTO> findAll();
-    ResponseDTO findById(String id);
-    ResponseDTO save(CreateEntityDTO entityDTO);
-    ResponseDTO update(String id, EntityDTO entityDTO);
-    void delete(String id);
+    ApiResponse findAll();
+    ApiResponse findById(String id);
+    ApiResponse save(CreateEntityDTO entityDTO);
+    ApiResponse update(EntityDTO entityDTO);
+    ApiResponse delete( String id);
 
 }
