@@ -13,6 +13,8 @@ public record SubjectDTO(
         @NotBlank( message = "Survey Id Is Required" )
         String id,
 
+        String parentSubjectId,
+
         @NotBlank( message = "Survey Title Is Required" )
         @Size(max = 250)
         String title

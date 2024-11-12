@@ -19,7 +19,6 @@ public record SubjectResponseDTO(
         @NotNull
         SurveyEditionDTO surveyEdition,
 
-        List<QuestionDTO> questions,
         List<SubjectResponseDTO> subSubjects,
         SubjectDTO parentSubject
 ) {

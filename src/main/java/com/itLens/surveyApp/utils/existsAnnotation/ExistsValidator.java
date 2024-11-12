@@ -4,8 +4,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.springframework.stereotype.Component;
 
-public class ExistsValidator implements ConstraintValidator<Exists, Long> {
+@Component
+public class ExistsValidator implements ConstraintValidator<Exists, String> {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -18,7 +20,7 @@ public class ExistsValidator implements ConstraintValidator<Exists, Long> {
     }
 
     @Override
-    public boolean isValid(Long id, ConstraintValidatorContext context) {
+    public boolean isValid(String id, ConstraintValidatorContext context) {
         if (id == null) { return false; }
 
         Object found = entityManager.find(entity, id);

@@ -27,7 +27,7 @@ public class OwnerService implements IOwnerService {
     public ApiResponse findAll() {
         List<OwnerResponseDTO> owners = ownerRepository.findAll()
                 .stream()
-                .map(ownerMapper::toResponseDtoFromEntity)
+                .map(ownerMapper::toResponseDtoFromEntityWithAllRelationShips)
                 .toList();
 
         return new SuccessApi<>(200, owners);
@@ -35,7 +35,7 @@ public class OwnerService implements IOwnerService {
 
     @Override
     public ApiResponse findById(String id) {
-        OwnerResponseDTO owner = ownerMapper.toResponseDtoFromEntity(
+        OwnerResponseDTO owner = ownerMapper.toResponseDtoFromEntityWithAllRelationShips(
                 ownerRepository.findById(id).orElse(null)
         );
 
@@ -49,18 +49,16 @@ public class OwnerService implements IOwnerService {
                 ownerMapper.toEntityFromCreateDto(createOwnerDTO)
         );
 
-        OwnerResponseDTO newOwner = ownerMapper.toResponseDtoFromEntity(owner);
+        OwnerResponseDTO newOwner = ownerMapper.toResponseDtoFromEntityWithAllRelationShips(owner);
         return new SuccessApi<OwnerResponseDTO>(201, newOwner);
     }
 
     @Override
     public ApiResponse update(String id, OwnerDTO ownerDTO) {
         Owner owner = ownerRepository.findById(id).orElse(null);
-        if (owner == null) { return new ErrorApi(404, new String[]{"Owner not found"}); }
-
         owner = ownerMapper.updateEntityFromDto(ownerDTO, owner);
 
-        OwnerResponseDTO updatedOwner = ownerMapper.toResponseDtoFromEntity(
+        OwnerResponseDTO updatedOwner = ownerMapper.toResponseDtoFromEntityWithAllRelationShips(
                 ownerRepository.save(owner)
         );
 

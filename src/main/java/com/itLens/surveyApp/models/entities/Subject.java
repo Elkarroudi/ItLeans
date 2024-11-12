@@ -56,7 +56,6 @@ public class Subject {
     )
     private List<Subject> subSubjects;
 
-    @NotBlank
     @ManyToOne
     @JoinColumn(
             name = "parentSubjectId"

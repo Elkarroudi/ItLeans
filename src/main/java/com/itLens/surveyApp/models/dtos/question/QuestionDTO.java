@@ -1,6 +1,7 @@
 package com.itLens.surveyApp.models.dtos.question;
 
 import com.itLens.surveyApp.models.entities.Question;
+import com.itLens.surveyApp.models.enums.QuestionType;
 import com.itLens.surveyApp.utils.existsAnnotation.Exists;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +20,7 @@ public record QuestionDTO(
         String question,
 
         @NotNull( message = "Answer Description Is Required" )
-        String questionType,
+        QuestionType questionType,
 
         @NotBlank( message = "Answer Answers Count Is Required" )
         int answerCount
