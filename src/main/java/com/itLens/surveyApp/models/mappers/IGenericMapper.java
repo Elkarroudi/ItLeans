@@ -10,7 +10,7 @@ public interface IGenericMapper<Entity, EntityDTO, CreateEntityDTO, EntityRespon
     Entity toEntityFromResponseDto(EntityResponseDTO entityResponseDTO);
 
     EntityDTO toDtoFromEntity(Entity entity);
-    EntityResponseDTO toResponseDtoFromEntity(Entity entity);
+    EntityResponseDTO toResponseDtoFromEntityWithAllRelationShips(Entity entity);
 
     @Mapping(source = "entityDTO.id", target = "id")
     Entity updateEntityFromDto(EntityDTO entityDTO, @MappingTarget Entity entity);

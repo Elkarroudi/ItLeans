@@ -3,6 +3,7 @@ package com.itLens.surveyApp.models.dtos.subject;
 import com.itLens.surveyApp.models.entities.Subject;
 import com.itLens.surveyApp.utils.existsAnnotation.Exists;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
 
 public record SubjectDTO(

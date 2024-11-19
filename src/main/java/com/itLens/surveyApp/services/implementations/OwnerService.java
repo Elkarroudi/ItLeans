@@ -12,11 +12,15 @@ import com.itLens.surveyApp.utils.responseEntities.ErrorApi;
 import com.itLens.surveyApp.utils.responseEntities.SuccessApi;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
+@Validated
 public class OwnerService implements IOwnerService {
 
     private final OwnerRepository ownerRepository;
@@ -27,7 +31,7 @@ public class OwnerService implements IOwnerService {
     public ApiResponse findAll() {
         List<OwnerResponseDTO> owners = ownerRepository.findAll()
                 .stream()
-                .map(ownerMapper::toResponseDtoFromEntity)
+                .map(ownerMapper::toResponseDtoFromEntityWithAllRelationShips)
                 .toList();
 
         return new SuccessApi<>(200, owners);
@@ -35,11 +39,15 @@ public class OwnerService implements IOwnerService {
 
     @Override
     public ApiResponse findById(String id) {
-        OwnerResponseDTO owner = ownerMapper.toResponseDtoFromEntity(
+        Map<String, String> errors = new HashMap<>();
+        OwnerResponseDTO owner = ownerMapper.toResponseDtoFromEntityWithAllRelationShips(
                 ownerRepository.findById(id).orElse(null)
         );
 
-        if (owner == null) { return new ErrorApi(404, new String[]{"Owner not found with Id: " + id}); }
+        if (owner == null) {
+            errors.put("owner", "Owner Does Not Exists WIth This Id");
+            return new ErrorApi(404, errors);
+        }
         return new SuccessApi<>(200, owner);
     }
 
@@ -49,18 +57,16 @@ public class OwnerService implements IOwnerService {
                 ownerMapper.toEntityFromCreateDto(createOwnerDTO)
         );
 
-        OwnerResponseDTO newOwner = ownerMapper.toResponseDtoFromEntity(owner);
+        OwnerResponseDTO newOwner = ownerMapper.toResponseDtoFromEntityWithAllRelationShips(owner);
         return new SuccessApi<OwnerResponseDTO>(201, newOwner);
     }
 
     @Override
     public ApiResponse update(String id, OwnerDTO ownerDTO) {
         Owner owner = ownerRepository.findById(id).orElse(null);
-        if (owner == null) { return new ErrorApi(404, new String[]{"Owner not found"}); }
+        owner.setName(ownerDTO.name());
 
-        owner = ownerMapper.updateEntityFromDto(ownerDTO, owner);
-
-        OwnerResponseDTO updatedOwner = ownerMapper.toResponseDtoFromEntity(
+        OwnerResponseDTO updatedOwner = ownerMapper.toResponseDtoFromEntityWithAllRelationShips(
                 ownerRepository.save(owner)
         );
 
@@ -69,8 +75,12 @@ public class OwnerService implements IOwnerService {
 
     @Override
     public ApiResponse delete(String id) {
+        Map<String, String> errors = new HashMap<>();
         Owner owner = ownerRepository.findById(id).orElse(null);
-        if (owner == null) { return new ErrorApi(404, new String[]{"Owner not found"}); }
+        if (owner == null) {
+            errors.put("owner", "Owner Does Not Exists WIth This Id");
+            return new ErrorApi(404, errors);
+        }
 
         ownerRepository.delete(owner);
         return new SuccessApi<>(200, "Owner deleted successfully");
