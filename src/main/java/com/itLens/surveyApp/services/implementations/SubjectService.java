@@ -16,7 +16,9 @@ import com.itLens.surveyApp.utils.responseEntities.SuccessApi;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -39,11 +41,15 @@ public class SubjectService implements ISubjectService {
 
     @Override
     public ApiResponse findById(String id) {
+        Map<String, String> errors = new HashMap<>();
         SubjectResponseDTO subject = subjectMapper.toResponseDtoFromEntityWithAllRelationShips(
                 subjectRepository.findById(id).orElse(null)
         );
 
-        if (subject == null) { return new ErrorApi(404, new String[]{"Subject not found with Id: " + id}); }
+        if (subject == null) {
+            errors.put("subject", "Subject Does Not Exist With This Id");
+            return new ErrorApi(404, errors);
+        }
         return new SuccessApi<>(200, subject);
     }
 
@@ -77,10 +83,14 @@ public class SubjectService implements ISubjectService {
 
     @Override
     public ApiResponse delete(String id) {
-        Subject survey = subjectRepository.findById(id).orElse(null);
-        if (survey == null) { return new ErrorApi(404, new String[]{"Survey not found"}); }
+        Map<String, String> errors = new HashMap<>();
+        Subject subject = subjectRepository.findById(id).orElse(null);
+        if (subject == null) {
+            errors.put("subject", "Subject Does Not Exist With This Id");
+            return new ErrorApi(404, errors);
+        }
 
-        subjectRepository.delete(survey);
+        subjectRepository.delete(subject);
         return new SuccessApi<>(200, "Subject deleted successfully");
     }
 

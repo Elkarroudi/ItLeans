@@ -6,6 +6,7 @@ import com.itLens.surveyApp.models.dtos.surveyEdition.CreateSurveyEditionDTO;
 import com.itLens.surveyApp.models.dtos.surveyEdition.SurveyEditionDTO;
 import com.itLens.surveyApp.services.contracts.ISurveyEditionService;
 import com.itLens.surveyApp.utils.responseEntities.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,12 +30,12 @@ public class SurveyEditionController {
     }
 
     @PostMapping
-    ApiResponse save(@Validated @RequestBody CreateSurveyEditionDTO entityDTO) {
+    ApiResponse save(@Valid @RequestBody CreateSurveyEditionDTO entityDTO) {
         return surveyEditionService.save(entityDTO);
     }
 
     @PutMapping("/{id}")
-    ApiResponse update(@PathVariable("id") String id, @Validated @RequestBody SurveyEditionDTO entityDTO) {
+    ApiResponse update(@PathVariable("id") String id, @Valid @RequestBody SurveyEditionDTO entityDTO) {
         return surveyEditionService.update(id, entityDTO);
     }
 

@@ -16,7 +16,9 @@ import com.itLens.surveyApp.utils.responseEntities.SuccessApi;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -39,25 +41,26 @@ public class QuestionService implements IQuestionService {
 
     @Override
     public ApiResponse findById(String id) {
+        Map<String, String> errors = new HashMap<>();
         QuestionResponseDTO questionResponseDTO = questionMapper.toResponseDtoFromEntityWithAllRelationShips(
                 questionRepository.findById(id).orElse(null)
         );
 
-        if (questionResponseDTO == null) { return new ErrorApi(404, new String[]{"Question not found with Id: " + id}); }
+        if (questionResponseDTO == null) {
+            errors.put("question", "Question Does Not Exists With This Id");
+            return new ErrorApi(404, errors);
+        }
         return new SuccessApi<>(200, questionResponseDTO);
     }
 
     @Override
     public ApiResponse save(CreateQuestionDTO createQuestionDTO) {
-        QuestionType questionType;
-        try {
-            questionType = QuestionType.valueOf(createQuestionDTO.questionType().toString().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return new ErrorApi(400, new String[]{"Invalid question type"});
-        }
 
         Question question = questionMapper.toEntityFromCreateDto(createQuestionDTO);
-        question.setQuestionType(questionType);
+        question.setSubject(
+                subjectRepository.findById(createQuestionDTO.subjectId()).orElse(null)
+        );
+
         question.setSubject(subjectRepository.findById(createQuestionDTO.subjectId()).orElse(null));
 
         Question newQuestion = questionRepository.save(question);
@@ -80,8 +83,12 @@ public class QuestionService implements IQuestionService {
 
     @Override
     public ApiResponse delete(String id) {
+        Map<String, String> errors = new HashMap<>();
         Question question = questionRepository.findById(id).orElse(null);
-        if (question == null) { return new ErrorApi(404, new String[]{"Question not found"}); }
+        if (question == null) {
+            errors.put("question", "Question Does Not Exists With This Id");
+            return new ErrorApi(404, errors);
+        }
 
         questionRepository.delete(question);
         return new SuccessApi<>(200, "Question deleted successfully");

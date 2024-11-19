@@ -17,7 +17,9 @@ import com.itLens.surveyApp.utils.responseEntities.SuccessApi;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -40,11 +42,15 @@ public class SurveyEditionService implements ISurveyEditionService {
 
     @Override
     public ApiResponse findById(String id) {
+        Map<String, String> errors = new HashMap<>();
         SurveyEditionResponseDTO survey = surveyEditionMapper.toResponseDtoFromEntityWithAllRelationShips(
                 surveyEditionRepository.findById(id).orElse(null)
         );
 
-        if (survey == null) { return new ErrorApi(404, new String[]{"Survey Edition not found with Id: " + id}); }
+        if (survey == null) {
+            errors.put("SurveyEdition", "Survey Edition Does Not Exists WIth This Id");
+            return new ErrorApi(404, errors);
+        }
         return new SuccessApi<>(200, survey);
     }
 
@@ -77,9 +83,12 @@ public class SurveyEditionService implements ISurveyEditionService {
 
     @Override
     public ApiResponse delete(String id) {
+        Map<String, String> errors = new HashMap<>();
         SurveyEdition surveyEdition = surveyEditionRepository.findById(id).orElse(null);
-        if (surveyEdition == null) { return new ErrorApi(404, new String[]{"Survey Edition not found with Id: " + id}); }
-
+        if (surveyEdition == null) {
+            errors.put("SurveyEdition", "Survey Edition Does Not Exists WIth This Id");
+            return new ErrorApi(404, errors);
+        }
         surveyEditionRepository.delete(surveyEdition);
         return new SuccessApi<>(200, new String[]{"Survey Edition deleted successfully"});
     }

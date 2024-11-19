@@ -1,8 +1,6 @@
 package com.itLens.surveyApp.models.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,11 +20,9 @@ import java.util.List;
 public class Subject {
 
     @Id
-    @GeneratedValue( strategy = GenerationType.UUID )
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @NotBlank
-    @Size(max = 255)
     @Column(
             name = "title",
             unique = true,
@@ -34,7 +30,6 @@ public class Subject {
     )
     private String title;
 
-    @NotBlank
     @ManyToOne
     @JoinColumn(
             name = "surveyEditionId",
@@ -57,9 +52,7 @@ public class Subject {
     private List<Subject> subSubjects;
 
     @ManyToOne
-    @JoinColumn(
-            name = "parentSubjectId"
-    )
+    @JoinColumn(name = "parentSubjectId")
     private Subject parentSubject;
 
     @CreationTimestamp
@@ -71,5 +64,4 @@ public class Subject {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
 }

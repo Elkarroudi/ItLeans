@@ -4,6 +4,7 @@ import com.itLens.surveyApp.models.dtos.answer.AnswerDTO;
 import com.itLens.surveyApp.models.dtos.answer.CreateAnswerDTO;
 import com.itLens.surveyApp.services.contracts.IAnswerService;
 import com.itLens.surveyApp.utils.responseEntities.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +28,12 @@ public class AnswerController {
     }
 
     @PostMapping
-    ApiResponse save(@Validated @RequestBody CreateAnswerDTO entityDTO) {
+    ApiResponse save(@Valid @RequestBody CreateAnswerDTO entityDTO) {
         return answerService.save(entityDTO);
     }
 
     @PutMapping("/{id}")
-    ApiResponse update(@PathVariable("id") String id, @Validated @RequestBody AnswerDTO entityDTO) {
+    ApiResponse update(@PathVariable("id") String id, @Valid @RequestBody AnswerDTO entityDTO) {
         return answerService.update(id, entityDTO);
     }
 

@@ -4,8 +4,8 @@ import com.itLens.surveyApp.models.dtos.owner.CreateOwnerDTO;
 import com.itLens.surveyApp.models.dtos.owner.OwnerDTO;
 import com.itLens.surveyApp.utils.responseEntities.ApiResponse;
 import com.itLens.surveyApp.services.contracts.IOwnerService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,12 +27,12 @@ public class OwnerController {
     }
 
     @PostMapping
-    ApiResponse save(@Validated @RequestBody CreateOwnerDTO entityDTO) {
+    ApiResponse save(@Valid @RequestBody CreateOwnerDTO entityDTO) {
         return ownerService.save(entityDTO);
     }
 
     @PutMapping("/{id}")
-    ApiResponse update(@PathVariable("id") String id, @Validated @RequestBody OwnerDTO entityDTO) {
+    ApiResponse update(@PathVariable("id") String id, @Valid @RequestBody OwnerDTO entityDTO) {
         return ownerService.update(id, entityDTO);
     }
 

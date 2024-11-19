@@ -2,9 +2,6 @@ package com.itLens.surveyApp.models.entities;
 
 import com.itLens.surveyApp.models.enums.QuestionType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,11 +21,9 @@ import java.util.List;
 public class Question {
 
     @Id
-    @GeneratedValue( strategy = GenerationType.UUID )
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @NotBlank
-    @Size(max = 255)
     @Column(
             name = "question",
             unique = true,
@@ -36,19 +31,15 @@ public class Question {
     )
     private String question;
 
-    @NotNull
     @Column(
             name = "questionType",
             nullable = false
     )
-    private QuestionType questionType;
+    private QuestionType questionType = QuestionType.SINGLE_CHOICE;
 
-    @Column(
-            name = "answerCount"
-    )
+    @Column(name = "answerCount")
     private int answerCount;
 
-    @NotBlank
     @ManyToOne
     @JoinColumn(
             name = "subjectId",
@@ -72,5 +63,4 @@ public class Question {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
 }

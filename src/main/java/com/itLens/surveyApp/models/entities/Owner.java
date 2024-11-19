@@ -1,7 +1,6 @@
 package com.itLens.surveyApp.models.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -20,10 +19,9 @@ import java.util.List;
 public class Owner implements Serializable {
 
     @Id
-    @GeneratedValue( strategy = GenerationType.UUID )
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @NotBlank
     @Size(max = 255)
     @Column(
             name = "name",
@@ -48,5 +46,4 @@ public class Owner implements Serializable {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
 }

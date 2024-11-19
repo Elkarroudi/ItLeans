@@ -16,7 +16,9 @@ import com.itLens.surveyApp.utils.responseEntities.SuccessApi;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -39,11 +41,15 @@ public class AnswerService implements IAnswerService {
 
     @Override
     public ApiResponse findById(String id) {
+        Map<String, String> errors = new HashMap<>();
         AnswerResponseDTO answer = answerMapper.toResponseDtoFromEntityWithAllRelationShips(
                 answerRepository.findById(id).orElse(null)
         );
 
-        if (answer == null) { return new ErrorApi(404, new String[]{"Survey not found with Id: " + id}); }
+        if (answer == null) {
+            errors.put("error", "Answer Does NOt Exists With this id");
+            return new ErrorApi(404, errors);
+        }
         return new SuccessApi<>(200, answer);
     }
 
@@ -76,8 +82,12 @@ public class AnswerService implements IAnswerService {
 
     @Override
     public ApiResponse delete(String id) {
+        Map<String, String> errors = new HashMap<>();
         Answer answer = answerRepository.findById(id).orElse(null);
-        if (answer == null) { return new ErrorApi(404, new String[]{"answer not found"}); }
+        if (answer == null) {
+            errors.put("error", "Answer Does NOt Exists With this id");
+            return new ErrorApi(404, errors);
+        }
 
         answerRepository.delete(answer);
         return new SuccessApi<>(200, "Survey deleted successfully");

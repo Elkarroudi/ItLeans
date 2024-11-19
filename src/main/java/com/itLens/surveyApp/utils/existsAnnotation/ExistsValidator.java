@@ -4,10 +4,14 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ExistsValidator implements ConstraintValidator<Exists, String> {
+
+    private final static String FIELD_NAME = "id";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -21,10 +25,20 @@ public class ExistsValidator implements ConstraintValidator<Exists, String> {
 
     @Override
     public boolean isValid(String id, ConstraintValidatorContext context) {
-        if (id == null) { return false; }
+        if (id == null || id.isEmpty()) {
+            return true;
+        }
 
-        Object found = entityManager.find(entity, id);
-        return found != null;
+        String queryStr = String.format(
+                "SELECT COUNT(e) FROM %s e WHERE e.%s = :id",
+                entity.getSimpleName(), FIELD_NAME
+        );
+
+        Long count = entityManager.createQuery(queryStr, Long.class)
+                .setParameter("id", id)
+                .getSingleResult();
+
+        return count > 0;
     }
 
 }

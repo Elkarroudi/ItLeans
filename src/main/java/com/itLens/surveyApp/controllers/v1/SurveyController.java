@@ -4,6 +4,7 @@ import com.itLens.surveyApp.models.dtos.survey.CreateSurveyDTO;
 import com.itLens.surveyApp.models.dtos.survey.SurveyDTO;
 import com.itLens.surveyApp.services.contracts.ISurveyService;
 import com.itLens.surveyApp.utils.responseEntities.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 public class SurveyController {
 
     private final ISurveyService surveyService;
-
 
     @GetMapping
     ApiResponse findAll() {
@@ -27,12 +27,12 @@ public class SurveyController {
     }
 
     @PostMapping
-    ApiResponse save(@Validated @RequestBody CreateSurveyDTO entityDTO) {
+    ApiResponse save(@Valid @RequestBody CreateSurveyDTO entityDTO) {
         return surveyService.save(entityDTO);
     }
 
     @PutMapping("/{id}")
-    ApiResponse update(@PathVariable("id") String id, @Validated @RequestBody SurveyDTO entityDTO) {
+    ApiResponse update(@PathVariable("id") String id, @Valid @RequestBody SurveyDTO entityDTO) {
         return surveyService.update(id, entityDTO);
     }
 

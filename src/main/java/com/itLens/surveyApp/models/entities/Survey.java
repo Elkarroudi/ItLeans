@@ -1,8 +1,6 @@
 package com.itLens.surveyApp.models.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -19,11 +17,9 @@ import java.util.List;
 public class Survey {
 
     @Id
-    @GeneratedValue( strategy = GenerationType.UUID )
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @NotBlank
-    @Size(max = 255)
     @Column(
             name = "title",
             unique = true,
@@ -31,14 +27,12 @@ public class Survey {
     )
     private String title;
 
-    @NotBlank
     @Column(
             name = "description",
             nullable = false
     )
     private String description;
 
-    @NotBlank
     @ManyToOne
     @JoinColumn(
             name = "ownerId",
@@ -62,5 +56,4 @@ public class Survey {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
 }

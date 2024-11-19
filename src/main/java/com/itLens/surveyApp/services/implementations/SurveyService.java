@@ -3,6 +3,7 @@ package com.itLens.surveyApp.services.implementations;
 import com.itLens.surveyApp.models.dtos.survey.CreateSurveyDTO;
 import com.itLens.surveyApp.models.dtos.survey.SurveyDTO;
 import com.itLens.surveyApp.models.dtos.survey.SurveyResponseDTO;
+import com.itLens.surveyApp.models.entities.Owner;
 import com.itLens.surveyApp.models.entities.Survey;
 import com.itLens.surveyApp.models.mappers.contracts.SurveyMapper;
 import com.itLens.surveyApp.repositories.OwnerRepository;
@@ -15,7 +16,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -38,22 +41,29 @@ public class SurveyService implements ISurveyService {
 
     @Override
     public ApiResponse findById(String id) {
+        Map<String, String> errors = new HashMap<>();
         SurveyResponseDTO survey = surveyMapper.toResponseDtoFromEntityWithAllRelationShips(
                 surveyRepository.findById(id).orElse(null)
         );
 
-        if (survey == null) { return new ErrorApi(404, new String[]{"Survey not found with Id: " + id}); }
+        if (survey == null) {
+            errors.put("Survey", "Survey Does Not Exists WIth This Id");
+            return new ErrorApi(404, errors);
+        }
         return new SuccessApi<>(200, survey);
     }
 
     @Override
     public ApiResponse save(CreateSurveyDTO createSurveyDTO) {
+        Map<String, String> errors = new HashMap<>();
+        Owner owner =  ownerRepository.findById( createSurveyDTO.ownerId() ).orElse(null);
+        if (owner == null) {
+            errors.put("Owner", "Owner Does Not Exists WIth This Id");
+            return new ErrorApi(404, errors);
+        }
+
         Survey survey = surveyMapper.toEntityFromCreateDto(createSurveyDTO);
-        survey.setOwner(
-                ownerRepository.findById(
-                        createSurveyDTO.ownerId()
-                ).orElse(null)
-        );
+        survey.setOwner(owner);
 
         Survey savedOwner = surveyRepository.save(survey);
         SurveyResponseDTO newSurvey = surveyMapper.toResponseDtoFromEntityWithAllRelationShips(savedOwner);
@@ -65,7 +75,6 @@ public class SurveyService implements ISurveyService {
     public ApiResponse update(String id, SurveyDTO surveyDTO) {
         Survey survey = surveyRepository.findById(id).orElse(null);
         surveyMapper.updateEntityFromDto(surveyDTO, survey);
-
         SurveyResponseDTO updatedSurvey = surveyMapper.toResponseDtoFromEntityWithAllRelationShips(
                 surveyRepository.save(survey)
         );
@@ -74,10 +83,13 @@ public class SurveyService implements ISurveyService {
     }
 
     @Override
-    @Transactional
     public ApiResponse delete(String id) {
+        Map<String, String> errors = new HashMap<>();
         Survey survey = surveyRepository.findById(id).orElse(null);
-        if (survey == null) { return new ErrorApi(404, new String[]{"Survey not found"}); }
+        if (survey == null) {
+            errors.put("Survey", "Survey Does Not Exists WIth This Id");
+            return new ErrorApi(404, errors);
+        }
 
         surveyRepository.delete(survey);
         return new SuccessApi<>(200, "Survey deleted successfully");

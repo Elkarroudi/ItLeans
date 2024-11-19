@@ -1,8 +1,6 @@
 package com.itLens.surveyApp.models.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,11 +19,9 @@ import java.time.LocalDateTime;
 public class Answer {
 
     @Id
-    @GeneratedValue( strategy = GenerationType.UUID )
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @NotBlank
-    @Size(max = 255)
     @Column(
             name = "answer",
             unique = true,
@@ -33,12 +29,9 @@ public class Answer {
     )
     private String answer;
 
-    @Column(
-            name = "selectionCount"
-    )
+    @Column(name = "selectionCount")
     private int selectionCount;
 
-    @NotBlank
     @ManyToOne
     @JoinColumn(
             name = "questionId",
@@ -55,5 +48,4 @@ public class Answer {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
 }
